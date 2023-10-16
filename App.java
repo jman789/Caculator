@@ -1,37 +1,77 @@
-package caculator;
+import java.util.List;
 import java.util.Scanner;
+
 public class App {
+    private static final Scanner inputScanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        // Caculator ca = new Caculator();
-        // App app = new App();
+        Caculator caculator = new Caculator();
 
-        String stringPrompt = ("Please enter a string: ");
-        String doublePrompt = ("Please enter a double: ");
+        while (true) {
+            String operation = menu();
+            if (operation.equals("exit")) {
+                return;
+            }
 
-        double num1 = App.getDouble(doublePrompt);
-        double num2 = App.getDouble(doublePrompt);
-        double num3 = Caculator.sum(num1, num2);
-        double num4 = Caculator.Multiply(num1, num2);
-        double num5 = Caculator.Divide(num1, num2);
-        String nums = String.format("You want to add %.2f and %.2f", num1, num2);
-        System.out.println(nums);
-        System.out.println(num3);
+            System.out.println();
+
+            double result = 0;
+            double num1 = getDouble("Enter the first number: ");
+            double num2 = getDouble("Enter the second number: ");
+
+            switch (operation) {
+                case "add":
+                    result = caculator.add(num1, num2);
+                    break;
+                case "subtract":
+                    result = caculator.subtract(num1, num2);
+                    break;
+                case "multiply":
+                    result = caculator.multiply(num1, num2);
+                    break;
+                case "divide":
+                    result = caculator.divide(num1, num2);
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Invalid mathematical operation");
+            }
+            System.out.println(String.format("Result: %f", result));
+        }
     }
-    static final Scanner inputScanner = new Scanner(System.in);
-    
-       
-        private static String getString(String prompt) {
-           System.out.println(prompt);
-           String userInput = inputScanner.nextLine();
-           return userInput;
 
+    private static String menu() {
+        List<String> options = List.of("add", "subtract", "multiply", "divide", "exit");
+
+        String selection = "";
+        while (!options.contains(selection)) {
+            System.out.println();
+            System.out.println("What would you like to do?");
+            System.out.println("  add");
+            System.out.println("  subtract");
+            System.out.println("  multiply");
+            System.out.println("  divide");
+            System.out.println("  exit");
+            selection = getString(null).toLowerCase();
         }
+        return selection;
+    }
 
-        private static double getDouble(String prompt) {
-            System.out.println(prompt);
-            double userInput = inputScanner.nextDouble();
-            return userInput;
+    private static String getString(String prompt) {
+        showPrompt(prompt);
+        return inputScanner.nextLine();
+    }
+
+    private static double getDouble(String prompt) {
+        showPrompt(prompt);
+        double input = inputScanner.nextDouble();
+        inputScanner.nextLine();
+        return input;
+    }
+
+    private static void showPrompt(String prompt) {
+        if (prompt == null || prompt.trim().length() == 0) {
+            prompt = "> ";
         }
-
-    
+        System.out.print(prompt);
+    }
 }
